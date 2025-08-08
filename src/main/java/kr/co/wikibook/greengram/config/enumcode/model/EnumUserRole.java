@@ -1,6 +1,8 @@
-package kr.co.wikibook.greengram.config.enumcode;
+package kr.co.wikibook.greengram.config.enumcode.model;
 
 import jakarta.persistence.Converter;
+import kr.co.wikibook.greengram.config.enumcode.AbstractEnumCodeConverter;
+import kr.co.wikibook.greengram.config.enumcode.EnumMapperType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

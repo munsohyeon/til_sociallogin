@@ -5,17 +5,16 @@ import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class UserRole{
+public class FeedPic extends CreatedAt{
     @EmbeddedId
-    private UserRoleIds userRoleIds;
+    private FeedPicIds feedPicIds;
 
-    // 관계 설정
     @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @MapsId("feedId")
+    @JoinColumn(name = "feed_id")
+    private Feed feed;
 }

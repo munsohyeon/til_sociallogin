@@ -1,4 +1,8 @@
 package kr.co.wikibook.greengram.application.user;
 
-public interface UserRepository {
+import kr.co.wikibook.greengram.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+// <연결할 엔티티, 타입>
+public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUid(String uid);
 }

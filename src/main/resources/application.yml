@@ -1,6 +1,9 @@
 constants:
   file:
     upload-directory: D:\msfile\backand\upload\greegram
+    feed-pic: /feed
+    profile-pic: /profile
+
   jwt:
     issuer: green502@green.com #??? ??
     bearer-format: JWT
@@ -14,9 +17,9 @@ constants:
     access-token-validity-milliseconds: 900_000 #15? (ms) 60 * 15 * 1000
 
     refresh-token-cookie-name: refresh-token
-    refresh-token-cookie-path: /api/v1/account/reissue 해당 path때만 refresh-token값이 넘어온다.
-    refresh-token-cookie-validity-seconds: 900 #15분 60*15
-    refresh-token-validity-milliseconds: 900_000 #15일 (ms) 60 * 15 * 1000
+    refresh-token-cookie-path: /api/v1/user/reissue #해당 path때만 refresh-token값이 넘어온다.
+    refresh-token-cookie-validity-seconds: 1_296_000 #15분 60*15
+    refresh-token-validity-milliseconds: 1_296_000_000 #15일 (ms) 60 * 15 * 1000
 
 spring:
   application:

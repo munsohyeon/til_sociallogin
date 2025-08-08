@@ -36,7 +36,7 @@ public class JwtTokenManager {
 
     public void setAccessTokenInCookie(HttpServletResponse response, String accessToken) {
         cookieUtils.setCookie(response, constJwt.getAccessTokenCookieName(), accessToken
-                            , constJwt.getAccessTokenCookieValiditySeconds(), constJwt.getAccessTokenCookiePath());
+                , constJwt.getAccessTokenCookieValiditySeconds(), constJwt.getAccessTokenCookiePath());
     }
 
     public String getAccessTokenFromCookie(HttpServletRequest request) {
@@ -85,7 +85,7 @@ public class JwtTokenManager {
         setAccessTokenInCookie(response, accessToken);
     }
 
-    public void logout(HttpServletResponse response) {
+    public void signOut(HttpServletResponse response) {
         deleteAccessTokenInCookie(response);
         deleteRefreshTokenInCookie(response);
     }
