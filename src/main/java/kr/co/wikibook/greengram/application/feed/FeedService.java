@@ -1,5 +1,7 @@
 package kr.co.wikibook.greengram.application.feed;
 
+import kr.co.wikibook.greengram.application.feed.model.FeedGetDto;
+import kr.co.wikibook.greengram.application.feed.model.FeedGetRes;
 import kr.co.wikibook.greengram.application.feed.model.FeedPostReq;
 import kr.co.wikibook.greengram.config.util.ImgUploadManager;
 import kr.co.wikibook.greengram.entity.Feed;
@@ -20,9 +22,10 @@ import java.util.List;
 public class FeedService {
     private final FeedRepository feedRepository;
     private final ImgUploadManager imgUploadManager;
+    private final FeedMapper feedMapper;
 
     @Transactional
-    public void postFeed(Long singedUserId, FeedPostReq req, List<MultipartFile> pics){
+    public FeedPostRes postFeed(Long singedUserId, FeedPostReq req, List<MultipartFile> pics){
         User wirterUser = new User();
         wirterUser.setUserId(singedUserId);
 
@@ -37,5 +40,11 @@ public class FeedService {
         List<String> fileNames = imgUploadManager.saveFeedPics(feed.getFeedId(), pics);
 
         feed.addFeedPics(fileNames);
+
+        return new FeedPostRes(feed.getFeedId(), fileNames);
+    }
+
+    public List<FeedGetRes> getFeedList(FeedGetDto dto){
+        return feedMapper.findAllLimitedTo(dto);
     }
 }

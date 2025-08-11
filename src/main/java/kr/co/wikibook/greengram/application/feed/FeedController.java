@@ -1,16 +1,16 @@
 package kr.co.wikibook.greengram.application.feed;
 
 import jakarta.validation.Valid;
+import kr.co.wikibook.greengram.application.feed.model.FeedGetDto;
+import kr.co.wikibook.greengram.application.feed.model.FeedGetReq;
+import kr.co.wikibook.greengram.application.feed.model.FeedGetRes;
 import kr.co.wikibook.greengram.application.feed.model.FeedPostReq;
 import kr.co.wikibook.greengram.config.model.ResultResponse;
 import kr.co.wikibook.greengram.config.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -21,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeedController {
     private final FeedService feedService;
+    private final FeedMapper feedMapper;
 
     @PostMapping
     public ResultResponse<?> postFeed(@AuthenticationPrincipal UserPrincipal userPrincipal
@@ -29,7 +30,25 @@ public class FeedController {
         log.info("signedUserId: {}", userPrincipal.getSignedUserId());
         log.info("req: {}", req);
         log.info("pics: {}", pics.size());
-        feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
-        return new ResultResponse<>("피드 등록 완료", null);
+        //feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
+        FeedPostRes result = feedService.postFeed(userPrincipal.getSignedUserId(), req, pics);
+        return new ResultResponse<>("피드 등록 완료", result);
+    }
+
+    // 페이징, 피드(사진, 댓글(3개만))
+    // 현재는 피드+사진만 (N + 1)
+
+    @GetMapping
+    public ResultResponse<?> getFeedList(@AuthenticationPrincipal UserPrincipal userPrincipal
+                                        , @Valid @ModelAttribute FeedGetReq req) {
+        log.info("signedUserId: {}", userPrincipal.getSignedUserId());
+        log.info("req: {}", req);
+        FeedGetDto feedGetDto = FeedGetDto.builder()
+                                            .signedUserId(userPrincipal.getSignedUserId())
+                                            .startIdx((req.getPage()-1) * req.getRowPerPage())
+                                            .size(req.getRowPerPage())
+                                            .build();
+        List<FeedGetRes> result = feedService.getFeedList(feedGetDto);
+        return new ResultResponse<>(String.format("rows: %d", result.size()), result);
     }
 }
