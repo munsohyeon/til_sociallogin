@@ -1,6 +1,5 @@
-package kr.co.wikibook.greengram.application.feed;
+package kr.co.wikibook.greengram.application.feed.model;
 
-import kr.co.wikibook.greengram.entity.Feed;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

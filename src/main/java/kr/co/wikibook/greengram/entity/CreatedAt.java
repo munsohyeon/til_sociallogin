@@ -19,4 +19,5 @@ public class CreatedAt {
     @CreatedDate // 현재 일시값
     @Column(nullable = false) // NOT NULL
     private LocalDateTime createdAt;
+
 }

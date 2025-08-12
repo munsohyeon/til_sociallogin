@@ -23,7 +23,7 @@ public class UserController {
 
     @PostMapping("/sign-up")
     public ResultResponse<?> signUp(@Valid @RequestPart UserSignUpReq req, @RequestPart(required = false)MultipartFile pic) {
-
+        // MultipartFile을 사용하면 무조건 @RequestPart를 사용해야함
         log.info("req={}", req);
         log.info("pic={}", pic != null ? pic.getOriginalFilename() : pic );
         userService.signUp(req,pic);
