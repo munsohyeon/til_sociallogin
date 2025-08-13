@@ -3,13 +3,13 @@ package kr.co.wikibook.greengram.application.user;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import kr.co.wikibook.greengram.application.user.model.UserSignInDto;
-import kr.co.wikibook.greengram.application.user.model.UserSignInReq;
-import kr.co.wikibook.greengram.application.user.model.UserSignUpReq;
+import kr.co.wikibook.greengram.application.user.model.*;
 import kr.co.wikibook.greengram.config.jwt.JwtTokenManager;
 import kr.co.wikibook.greengram.config.model.ResultResponse;
+import kr.co.wikibook.greengram.config.model.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -51,4 +51,13 @@ public class UserController {
         return new ResultResponse<>("AccessToken 재발행 성공",  null);
     }
 
+    @GetMapping
+    public ResultResponse<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal
+                                    , @RequestParam("profile_user_id") Long profileUserId){
+        log.info("profileUserId={}", profileUserId);
+        UserProfileGetDto dto = new UserProfileGetDto(userPrincipal.getSignedUserId(), profileUserId);
+        UserProfileGetRes userProfileGetRes = userService.getProfileUser(dto);
+        // getProfileUser 발간줄
+        return new ResultResponse<>("프로파일 유저 정보", userProfileGetRes);
+    }
 }

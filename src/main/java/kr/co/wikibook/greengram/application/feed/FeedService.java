@@ -62,7 +62,7 @@ public class FeedService {
         for(FeedGetRes feedGetRes : list) {
             feedGetRes.setPics(feedMapper.findAllPicByFeedId(feedGetRes.getFeedId()));
             //startIdx:0, size: 4
-            FeedCommentGetReq req = new FeedCommentGetReq(feedGetRes.getFeedId(), constComment.startIndex, constComment.needForViewCount + 1);
+            FeedCommentGetReq req = new FeedCommentGetReq(feedGetRes.getFeedId(), constComment.startIndex, constComment.needForViewCount);
             List<FeedCommentItem> commentList = feedCommentMapper.findAllByFeedIdLimitedTo(req);
             boolean moreComment = commentList.size() > constComment.needForViewCount; // row 수가 4였을 때만 true가 담기고, row수가 0~3인 경우는 false가 담긴다.
             FeedCommentGetRes feedCommentGetRes = new FeedCommentGetRes(moreComment, commentList);

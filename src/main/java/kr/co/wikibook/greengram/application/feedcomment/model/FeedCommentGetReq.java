@@ -25,12 +25,19 @@ public class FeedCommentGetReq {
     @NotNull(message = "size는 필수값")
     private Integer size;
 
+//    private Integer sizePlusOne;
+
     @ConstructorProperties({"feed_id", "start_idx", "size"})
     // @BindParam("feed_id"), @BindParam("start_idx")
     public FeedCommentGetReq( long feedId, Integer startIdx, Integer size) {
         this.feedId = feedId;
         this.startIdx = startIdx;
         this.size = size;
+        // this.sizePlusOne = size +1
+    }
+
+    public Integer getSizePlusOne() {
+        return size + 1;
     }
 
 }

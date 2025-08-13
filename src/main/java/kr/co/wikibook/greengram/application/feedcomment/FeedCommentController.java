@@ -29,10 +29,20 @@ public class FeedCommentController {
     }
 
     @GetMapping
-    public ResultResponse<?> getFeedCommentList(@Valid @ModelAttribute FeedCommentGetReq req){
+    public ResultResponse<?> getFeedCommentList(@Valid @ModelAttribute FeedCommentGetReq req) {
         log.info("req: {}", req);
-        FeedCommentGetRes res = feedCommentService.getFeedList(req);
-        return null;
+        FeedCommentGetRes feedCommentGetRes = feedCommentService.getFeedList(req);
+        return new ResultResponse<>(String.format("rows: %d", feedCommentGetRes.getCommentList().size())
+                , feedCommentGetRes);
     }
+    //삭제시 받아야 할 데이터 feedCommentId + 로그인한 사용자의 PK  (feed_comment_id, signed_user_id)
+    //FE - data 전달방식 : Query-String
+    @DeleteMapping
+    public ResultResponse<?> deleteFeedComment(@AuthenticationPrincipal UserPrincipal userPrincipal
+                                            , @RequestParam("feed_comment_id") Long feedCommentId) {
+        feedCommentService.deleteFeed(userPrincipal.getSignedUserId(),feedCommentId);
+        return new ResultResponse<>("댓글을 삭제하였습니다.", null);
+    }
+
 
 }

@@ -1,9 +1,6 @@
 package kr.co.wikibook.greengram.application.user;
 
-import kr.co.wikibook.greengram.application.user.model.UserSignInDto;
-import kr.co.wikibook.greengram.application.user.model.UserSignInReq;
-import kr.co.wikibook.greengram.application.user.model.UserSignInRes;
-import kr.co.wikibook.greengram.application.user.model.UserSignUpReq;
+import kr.co.wikibook.greengram.application.user.model.*;
 import kr.co.wikibook.greengram.config.enumcode.model.EnumUserRole;
 import kr.co.wikibook.greengram.config.model.JwtUser;
 import kr.co.wikibook.greengram.config.util.ImgUploadManager;
@@ -67,5 +64,10 @@ public class UserService {
                             .jwtUser(jwtUser)
                             .userSignInRes(userSignInRes)
                             .build();
+    }
+
+    public UserProfileGetRes getProfileUser(UserProfileGetDto req) {
+        // 로그인후 유저정보 확인 해달라
+        return null;
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.wikibook.greengram.application.user.UserMapper">
+    <select id="findProfileByUserId">
+        SELECT  f.feed_id, f.contents, f.location, f.created_at, f.writer_user_id
+                ,u.user_id AS userId, u.pic, u.created_at AS createdAt, u.uid, u.nick_name AS nickName
+                , fl.feed_id IS NOT NULL AS isLike
+        FROM user u
+        INNER JOIN feed f
+            ON f.writer_user_id = u.user_id
+        LEFT JOIN feed_like fl
+            ON fl.feed_id = f.feed_id
+        AND fl.user_id = #{signedUserId}
+        LEFT JOIN (
+            SELECT feed_id, COUNT(*) AS like_count
+            FROM feed_like
+            GROUP BY feed_id
+        ) fl_f
+                ON fl_f.feed_id = f.feed_id
+        WHERE f.writer_user_id = #{profileId}
+        GROUP BY f.feed_id
+        ORDER BY f.feed_id DESC
+        LIMIT #{startIdx}, #{size}
+    </select>
+
+</mapper>
