@@ -1,6 +1,8 @@
 package kr.co.wikibook.greengram.application.feedcomment;
 
 import jakarta.validation.Valid;
+import kr.co.wikibook.greengram.application.feedcomment.model.FeedCommentGetReq;
+import kr.co.wikibook.greengram.application.feedcomment.model.FeedCommentGetRes;
 import kr.co.wikibook.greengram.application.feedcomment.model.FeedCommentPostReq;
 import kr.co.wikibook.greengram.entity.Feed;
 import kr.co.wikibook.greengram.entity.FeedComment;
@@ -33,4 +35,8 @@ public class FeedCommentService {
        return feedComment.getFeedCommentId();
     }
 
+    public FeedCommentGetRes getFeedList(FeedCommentGetReq req) {
+
+        return null;
+    }
 }
