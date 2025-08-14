@@ -1,7 +1,6 @@
 package kr.co.wikibook.greengram.application.follow;
 
-import kr.co.wikibook.greengram.application.follow.model.FollowPostReq;
-import kr.co.wikibook.greengram.config.model.ResultResponse;
+import jakarta.validation.Valid;
 import kr.co.wikibook.greengram.entity.User;
 import kr.co.wikibook.greengram.entity.UserFollow;
 import kr.co.wikibook.greengram.entity.UserFollowIds;
@@ -15,23 +14,43 @@ import org.springframework.stereotype.Service;
 public class FollowService {
     private final FollowRepository followRepository;
 
-    public void postUserFollow( long fromUserId, long toUserId ) {
-        UserFollowIds  userFollowIds = new UserFollowIds(fromUserId, toUserId);
-        log.info("toUserId : {}", toUserId);
-        log.info("fromUserId : {}", fromUserId);
+    public void postUserFollow(long fromUserId, long toUserId) {
+        UserFollowIds userFollowIds = UserFollowIds.builder()
+                .fromUserId(fromUserId)
+                .toUserId(toUserId)
+                .build();
+        User fromUser = new User();
+        fromUser.setUserId(fromUserId);
 
-        User to = new User();
-        to.setUserId(toUserId);
+        User toUser = new User();
+        toUser.setUserId(toUserId);
 
-        User from = new User();
-        from.setUserId(fromUserId);
-
-        UserFollow userFollow = new UserFollow();
-        userFollow.setToUser(to);
-        userFollow.setFromUser(from);
-        userFollow.setUserFollowIds(userFollowIds);
+        UserFollow userFollow = UserFollow.builder()
+                .userFollowIds(userFollowIds)
+                .fromUser(fromUser)
+                .toUser(toUser)
+                .build();
 
         followRepository.save(userFollow);
     }
 
+    public void deleteUserFollow(long fromUserId, long toUserId) {
+        UserFollowIds userFollowIds = UserFollowIds.builder()
+                .fromUserId(fromUserId)
+                .toUserId(toUserId)
+                .build();
+        User fromUser = new User();
+        fromUser.setUserId(fromUserId);
+
+        User toUser = new User();
+        toUser.setUserId(toUserId);
+
+        UserFollow userFollow = UserFollow.builder()
+                .userFollowIds(userFollowIds)
+                .fromUser(fromUser)
+                .toUser(toUser)
+                .build();
+
+        followRepository.delete(userFollow);
+    }
 }

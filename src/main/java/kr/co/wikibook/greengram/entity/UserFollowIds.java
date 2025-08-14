@@ -6,11 +6,11 @@ import lombok.*;
 import java.io.Serializable;
 
 @Getter
-@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 @EqualsAndHashCode
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserFollowIds implements Serializable {
     private Long fromUserId;
     private Long toUserId;

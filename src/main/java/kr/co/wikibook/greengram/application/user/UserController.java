@@ -22,42 +22,48 @@ public class UserController {
     private final JwtTokenManager jwtTokenManager;
 
     @PostMapping("/sign-up")
-    public ResultResponse<?> signUp(@Valid @RequestPart UserSignUpReq req, @RequestPart(required = false)MultipartFile pic) {
-        // MultipartFile을 사용하면 무조건 @RequestPart를 사용해야함
-        log.info("req={}", req);
-        log.info("pic={}", pic != null ? pic.getOriginalFilename() : pic );
-        userService.signUp(req,pic);
-        return new ResultResponse<Integer>("", 1);
+    public ResultResponse<?> signUp(@Valid @RequestPart UserSignUpReq req
+            , @RequestPart(required = false) MultipartFile pic) {
+        log.info("req: {}", req);
+        log.info("pic: {}", pic != null ? pic.getOriginalFilename() : pic);
+        userService.signUp(req, pic);
+        return new ResultResponse<>("", 1);
     }
 
-     @PostMapping("/sign-in")
-    public ResultResponse<?> signIn(@Valid @RequestBody UserSignInReq req, HttpServletResponse response){
-        log.info("req={}", req);
-         UserSignInDto userSignInDto = userService.signIn(req);
-         jwtTokenManager.issue(response, userSignInDto.getJwtUser());
-
+    //response는 쿠키에 AT, RT을 담기 위해 필요하다.
+    @PostMapping("/sign-in")
+    public ResultResponse<?> signIn(@Valid @RequestBody UserSignInReq req, HttpServletResponse response) {
+        log.info("req: {}", req);
+        UserSignInDto userSignInDto = userService.signIn(req);
+        jwtTokenManager.issue(response, userSignInDto.getJwtUser());
         return new ResultResponse<>("sign-in 성공", userSignInDto.getUserSignInRes());
-     }
+    }
 
-     @PostMapping("/sign-out")
-     public ResultResponse<?> signOut(HttpServletResponse response){
+    @PostMapping("/sign-out")
+    public ResultResponse<?> signOut(HttpServletResponse response) {
         jwtTokenManager.signOut(response);
-        return new ResultResponse<>("sign-out 성공",  null);
-     }
+        return new ResultResponse<>("sign-out 성공", null);
+    }
 
     @PostMapping("/reissue")
-    public ResultResponse<?> reissue(HttpServletResponse response, HttpServletRequest request){
+    public ResultResponse<?> reissue(HttpServletResponse response, HttpServletRequest request) {
         jwtTokenManager.reissue(request, response);
-        return new ResultResponse<>("AccessToken 재발행 성공",  null);
+        return new ResultResponse<>("AccessToken 재발행 성공", null);
     }
 
-    @GetMapping
-    public ResultResponse<?> getUser(@AuthenticationPrincipal UserPrincipal userPrincipal
-                                    , @RequestParam("profile_user_id") Long profileUserId){
-        log.info("profileUserId={}", profileUserId);
+    @GetMapping("/profile")
+    public ResultResponse<?> getProfileUser(@AuthenticationPrincipal UserPrincipal userPrincipal
+            , @RequestParam("profile_user_id") long profileUserId) {
+        log.info("profileUserId: {}", profileUserId);
         UserProfileGetDto dto = new UserProfileGetDto(userPrincipal.getSignedUserId(), profileUserId);
         UserProfileGetRes userProfileGetRes = userService.getProfileUser(dto);
-        // getProfileUser 발간줄
         return new ResultResponse<>("프로파일 유저 정보", userProfileGetRes);
+    }
+
+    @PatchMapping("/profile/pic")
+    public ResultResponse<?> patchProfilePic(@AuthenticationPrincipal UserPrincipal userPrincipal
+            , @RequestPart MultipartFile pic) {
+        String savedFileName = userService.patchProfilePic(userPrincipal.getSignedUserId(), pic);
+        return new ResultResponse<>("프로파일 사진 수정 완료", savedFileName);
     }
 }

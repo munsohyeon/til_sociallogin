@@ -18,10 +18,19 @@ public class FollowController {
 
     @PostMapping
     public ResultResponse<?> postUserFollow(@AuthenticationPrincipal UserPrincipal userPrincipal
-                                            , @Valid @RequestBody FollowPostReq req) {
-        log.info("fromUserId = {}", userPrincipal.getSignedUserId());
-        log.info("toUserId = {}", req.getToUserId());
+                                          , @Valid @RequestBody FollowPostReq req) {
+        log.info("fromUserId: {}", userPrincipal.getSignedUserId());
+        log.info("toUserId: {}", req.getToUserId());
         followService.postUserFollow(userPrincipal.getSignedUserId(), req.getToUserId());
         return new ResultResponse<>("팔로우 성공", null);
+    }
+
+    @DeleteMapping
+    public ResultResponse<?> deleteUserFollow(@AuthenticationPrincipal UserPrincipal userPrincipal
+                                            , @Valid @RequestParam("to_user_id") Long toUserId) {
+        log.info("fromUserId: {}", userPrincipal.getSignedUserId());
+        log.info("toUserId: {}", toUserId);
+        followService.deleteUserFollow(userPrincipal.getSignedUserId(), toUserId);
+        return new ResultResponse<>("팔로우 취소", null);
     }
 }
