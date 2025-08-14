@@ -18,8 +18,14 @@ public class FeedGetReq {
     @Positive
     private Integer rowPerPage;
 
-    public FeedGetReq (Integer page, @BindParam("row_per_page") Integer rowPerPage) {
+    @Positive
+    private long profileUserId;
+
+    public FeedGetReq (Integer page
+                        , @BindParam("row_per_page") Integer rowPerPage
+                        , @BindParam("profile_user_id") Long profileUserId ) {
         this.page = page;
         this.rowPerPage = rowPerPage;
+        this.profileUserId = profileUserId;
     }
 }

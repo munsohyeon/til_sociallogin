@@ -2,25 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.wikibook.greengram.application.user.UserMapper">
     <select id="findProfileByUserId">
-        SELECT  f.feed_id, f.contents, f.location, f.created_at, f.writer_user_id
-                ,u.user_id AS userId, u.pic, u.created_at AS createdAt, u.uid, u.nick_name AS nickName
-                , fl.feed_id IS NOT NULL AS isLike
+        SELECT u.user_id, u.pic, u.created_at, u.uid, u.nick_name
+            , COUNT(DISTINCT f.feed_id) AS feedCount
+            , COUNT(DISTINCT f.feed_id, fl.user_id) AS allFeedLikeCount
+            , COUNT(DISTINCT ut.to_user_id) AS followingCount <!-- 프로필 주인이 팔로우 하는 사람들은 몇 명인가  -->
+            , COUNT(DISTINCT uf.from_user_id) AS followCount <!-- 프로필 주인을 팔로우 하는 사람들은 몇 명인가 -->
+            , MAX(IF(F1.from_user_id = #{signedUserId}, 1, 0)) <!-- 로그인 사용자가 프로필 주인을 팔로우 한다면 1, 아니면 0  -->
+            + MAX(IF(F2.to_user_id = #{signedUserId}, 2, 0)) AS followState <!-- 프로필 주인이 로그인 사용자를 팔로우 한다면 2, 아니면 0  -->
         FROM user u
-        INNER JOIN feed f
+        LEFT JOIN feed f
             ON f.writer_user_id = u.user_id
         LEFT JOIN feed_like fl
             ON fl.feed_id = f.feed_id
-        AND fl.user_id = #{signedUserId}
-        LEFT JOIN (
-            SELECT feed_id, COUNT(*) AS like_count
-            FROM feed_like
-            GROUP BY feed_id
-        ) fl_f
-                ON fl_f.feed_id = f.feed_id
-        WHERE f.writer_user_id = #{profileId}
-        GROUP BY f.feed_id
-        ORDER BY f.feed_id DESC
-        LIMIT #{startIdx}, #{size}
+        LEFT JOIN user_follow ut <!-- 프로필 주인이 팔로우 하는 사람들 정보 -->
+            ON u.user_id = ut.from_user_id
+        LEFT JOIN user_follow uf <!-- 프로필 주인을 팔로우 하는 사람들 정보-->
+            ON u.user_id = uf.to_user_id
+        WHERE u.user_id = #{profileUserId};
     </select>
 
 </mapper>

@@ -1,9 +1,7 @@
 package kr.co.wikibook.greengram.entity;
 
 import jakarta.persistence.Embeddable;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -11,6 +9,8 @@ import java.io.Serializable;
 @Setter
 @Embeddable
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserFollowIds implements Serializable {
     private Long fromUserId;
     private Long toUserId;
