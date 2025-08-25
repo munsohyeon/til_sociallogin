@@ -69,6 +69,8 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
             UserRole userRole = new UserRole(ids, user);
             userRoles.add(userRole);
 
+            user.setUserRoles(userRoles);
+
             userRepository.save(user);
         }
 

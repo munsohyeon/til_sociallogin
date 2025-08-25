@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import kr.co.wikibook.greengram.application.user.model.*;
 import kr.co.wikibook.greengram.config.enumcode.model.EnumUserRole;
 import kr.co.wikibook.greengram.config.model.JwtUser;
+import kr.co.wikibook.greengram.config.security.SignInProviderType;
 import kr.co.wikibook.greengram.config.util.ImgUploadManager;
 import kr.co.wikibook.greengram.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class UserService {
         String hashedPassword = passwordEncoder.encode(req.getUpw());
 
         User user = new User();
+        user.setProviderType(SignInProviderType.LOCAL);
         user.setNickName(req.getNickName());
         user.setUid(req.getUid());
         user.setUpw(hashedPassword);
