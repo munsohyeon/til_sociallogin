@@ -2,6 +2,7 @@ package kr.co.wikibook.greengram.entity;
 
 import jakarta.persistence.*;
 import kr.co.wikibook.greengram.config.enumcode.model.EnumUserRole;
+import kr.co.wikibook.greengram.config.security.SignInProviderType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,17 +14,14 @@ import java.util.List;
 @Setter
 @Entity
 @EqualsAndHashCode
-@Table (
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        columnNames = {"uid"}
-                )
-        }
-)
+@Table (  uniqueConstraints = @UniqueConstraint(columnNames = {"uid", "ProviderType"}))
 public class User extends UpdatedAt {
     @Id // primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     private Long userId; // pk는 보통 long type 권장
+
+    @Column(nullable = false, length = 2)
+    private SignInProviderType providerType;
 
     @Column(length = 30)
     private String nickName;
