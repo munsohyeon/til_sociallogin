@@ -90,4 +90,21 @@ public class UserService {
         user.setPic(savedFileName);
         return savedFileName;
     }
+    @Transactional
+    public void deleteProfilePic(long signedUserId) {
+//        User user = userRepository.findById(signedUserId)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다."));
+//
+////        if (user.getPic() == null || user.getPic().isEmpty()) {
+////            return;
+////        }
+//
+//        imgUploadManager.removeProfileDirectory(signedUserId);
+//        user.setPic(null);
+
+        User user = userRepository.findById(signedUserId).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 사용자입니다."));
+
+        imgUploadManager.removeProfileDirectory(signedUserId);
+        user.setPic(null);
+    }
 }

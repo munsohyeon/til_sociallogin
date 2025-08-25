@@ -11,7 +11,7 @@ import lombok.*;
 @EqualsAndHashCode
 public class FeedLike extends CreatedAt {
     @EmbeddedId
-    private FeedLikeIds feedLikeIds;
+    private FeedLikeIds id;
 
     @ManyToOne
     @JoinColumn(name = "feed_id")

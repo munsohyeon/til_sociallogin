@@ -1,6 +1,7 @@
 package kr.co.wikibook.greengram.application.feed;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import kr.co.wikibook.greengram.application.feed.model.*;
 import kr.co.wikibook.greengram.config.model.ResultResponse;
 import kr.co.wikibook.greengram.config.model.UserPrincipal;
@@ -54,5 +55,14 @@ public class FeedController {
                                             .build();
         List<FeedGetRes> result = feedService.getFeedList(feedGetDto);
         return new ResultResponse<>(String.format("rows: %d", result.size()), result);
+    }
+
+    @DeleteMapping
+    public ResultResponse<?> deleteFeed(@AuthenticationPrincipal UserPrincipal userPrincipal
+            , @RequestParam("feed_id") @Valid @Positive Long feedId) {
+        log.info("signedUserId: {}", userPrincipal.getSignedUserId());
+        log.info("feedId: {}", feedId);
+        feedService.deleteFeed(userPrincipal.getSignedUserId(), feedId);
+        return new ResultResponse<>("피드가 삭제되었습니다.", null);
     }
 }
