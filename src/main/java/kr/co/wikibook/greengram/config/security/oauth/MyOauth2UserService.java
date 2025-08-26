@@ -41,7 +41,7 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
     }
 
     private OAuth2User process(OAuth2UserRequest req) {
-        OAuth2User oAuth2User = super.loadUser(req);
+        OAuth2User oAuth2User = super.loadUser(req); // 소셜 로그인 완료하고 사용자 정보 JSON형태의 데이터를 담고 있는 객체
         /*
         req.getClientRegistration().getRegistrationId(); 소셜로그인 신청한 플랫폼 문자열값이 넘어온다.
         플랫폼 문자열값은 spring.security.oauth2.client.registration 아래에 있는 속성값들이다. (google, kakao, naver)
@@ -85,7 +85,7 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
         JwtUser jwtUser = new OAuth2JwtUser(nickName, user.getPic(), user.getUserId(), roles);
 
         UserPrincipal myUserDetails = new UserPrincipal(jwtUser);
-        return myUserDetails;
+        return myUserDetails; // 이 객체는 OAuth2AuthenticationSuccessHandler객체의 onAuthenticationSuccess메소드의 Authentication auth 매개 변수로 전달된다.
     }
 }
 

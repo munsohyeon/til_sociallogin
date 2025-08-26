@@ -8,7 +8,8 @@ import java.util.Optional;
         "id": id값,
         "name": 이름값,
         "email": 이메일,
-        "nickname": 닉네임
+        "nickname": 닉네임,
+        "profile_image":프로필사진
     }
 
 
